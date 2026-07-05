@@ -23,8 +23,9 @@ export function parseGviz(text) {
 /** "🎒 קטגוריית מנשאים" -> "מנשאים" (mapped through CATEGORY_MAP). */
 export function stripCategory(header) {
   const stripped = header
-    .replace(/[\p{Extended_Pictographic}️]/gu, "")
+    .replace(/[\p{Extended_Pictographic}‍️]/gu, "")
     .replace(/קטגוריית/g, "")
+    .replace(/\s+/g, " ")
     .trim();
   return CATEGORY_MAP[stripped] || stripped;
 }

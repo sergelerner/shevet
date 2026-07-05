@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  parseGviz, parseStackedTab, parseGuidesTab, parseBooksTab, toCsv,
+  parseGviz, parseStackedTab, parseGuidesTab, parseBooksTab, toCsv, stripCategory,
 } from "../scripts/lib-migrate.mjs";
 
 const gvizWrap = (rows) =>
@@ -13,6 +13,17 @@ const gvizWrap = (rows) =>
 test("parseGviz unwraps JSONP and stringifies cells", () => {
   const text = gvizWrap([["שלום", null, 5]]);
   assert.deepEqual(parseGviz(text), [["שלום", "", "5"]]);
+});
+
+test("stripCategory strips ZWJ emoji and collapses whitespace", () => {
+  // ZWJ emoji like 🧑‍⚕️ (person health worker) leave behind U+200D + stray spaces
+  assert.equal(stripCategory("🧑‍⚕️ קטגוריית אנשי מקצוע ומטפלים"), "אנשי מקצוע ומטפלים");
+  // Regular emoji
+  assert.equal(stripCategory("🎒 קטגוריית מנשאים"), "מנשאים");
+  // Multiple spaces should collapse to single space
+  assert.equal(stripCategory("🎒  קטגוריית  מנשאים"), "מנשאים");
+  // ZWJ + multiple spaces
+  assert.equal(stripCategory("🧑‍⚕️  קטגוריית  אנשי מקצוע ומטפלים"), "אנשי מקצוע ומטפלים");
 });
 
 test("parseStackedTab: category headers, column headers, products", () => {
