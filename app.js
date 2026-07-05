@@ -65,7 +65,8 @@ function ErrorScreen() {
   return html`
     <div class="center error">
       <h2>אופס 😅</h2>
-      <p>לא הצלחנו לטעון את ההמלצות. בדקו את החיבור לאינטרנט ונסו שוב.</p>
+      <p>לא הצלחנו לטעון את ההמלצות.</p>
+      <p class="kicker">בדקו את החיבור לאינטרנט, או שהגיליון עדיין משותף לצפייה.</p>
       <button class="retry" onClick=${() => { status.value = "loading"; load(); }}>נסו שוב</button>
     </div>`;
 }

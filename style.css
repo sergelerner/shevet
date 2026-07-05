@@ -100,3 +100,8 @@ button.pcard:active { border-color: var(--accent); }
   background: var(--card); pointer-events: none;
 }
 .result-wrap .pcard b { padding-left: 90px; }
+
+.retry {
+  background: var(--ink); color: var(--bg); border: 0; border-radius: 12px;
+  font: 500 15px var(--rubik); padding: 12px 28px; margin-top: 10px; cursor: pointer;
+}
