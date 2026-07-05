@@ -37,7 +37,17 @@ const CACHE_KEY = "shevet-db-v1";
 async function load() {
   const cached = localStorage.getItem(CACHE_KEY);
   if (cached) {
-    try { products.value = JSON.parse(cached); status.value = "ready"; } catch { /* stale junk */ }
+    try {
+      const parsed = JSON.parse(cached);
+      if (Array.isArray(parsed) && parsed.length && parsed.every((p) => p && typeof p.name === "string" && p.name)) {
+        products.value = parsed;
+        status.value = "ready";
+      } else {
+        localStorage.removeItem(CACHE_KEY);
+      }
+    } catch {
+      localStorage.removeItem(CACHE_KEY);
+    }
   }
   try {
     const res = await fetch(GVIZ_URL);
@@ -136,7 +146,7 @@ function ProductCard({ product: p }) {
     return html`<div class="pcard plain"><b>${p.name}</b></div>`;
   }
   return html`
-    <button class="pcard" onClick=${() => (selected.value = p)}>
+    <button type="button" class="pcard" onClick=${() => (selected.value = p)}>
       <b>${p.name}</b>
       ${p.description && html`<p class="desc clamp">${p.description}</p>`}
     </button>`;
