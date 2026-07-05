@@ -97,7 +97,34 @@ function CategoryIndex({ cats }) {
 
 function SearchResults() { return html`<div></div>`; } // Task 8
 
-function CategoryPage() { return html`<p>category — Task 6</p>`; }
+function CategoryPage({ name }) {
+  const items = products.value.filter((p) => p.category === name);
+  const cfg = CFG.CATEGORIES.find((c) => c.name === name);
+  const emoji = cfg ? cfg.emoji : CFG.FALLBACK_EMOJI;
+  return html`
+    <header class="cat-head">
+      <a class="back" href="#/">→ חזרה</a>
+      <h2>${emoji} ${name}</h2>
+      <p class="kicker">${items.length} המלצות</p>
+      <div class="rule"></div>
+    </header>
+    ${items.length
+      ? items.map((p) => html`<${ProductCard} product=${p} key=${p.name} />`)
+      : html`<p class="empty">אין עדיין המלצות בקטגוריה הזו</p>`}
+  `;
+}
+
+function ProductCard({ product: p }) {
+  if (!L.hasDetails(p)) {
+    return html`<div class="pcard plain"><b>${p.name}</b></div>`;
+  }
+  return html`
+    <button class="pcard" onClick=${() => (selected.value = p)}>
+      <b>${p.name}</b>
+      ${p.description && html`<p class="desc clamp">${p.description}</p>`}
+    </button>`;
+}
+
 function BottomSheet() { return null; }
 
 function App() {
