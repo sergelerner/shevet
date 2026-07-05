@@ -67,8 +67,35 @@ function ErrorScreen() {
 
 function Home() {
   const cats = L.orderCategories(products.value, CFG.CATEGORIES, CFG.FALLBACK_EMOJI);
-  return html`<pre dir="ltr">${JSON.stringify(cats.map((c) => c.name + ": " + c.items.length), null, 1)}</pre>`;
+  const q = query.value;
+  return html`
+    <header class="masthead">
+      <h1>${CFG.TITLE}<span class="dot">.</span></h1>
+      <p class="kicker">${CFG.KICKER} · ${products.value.length} המלצות</p>
+      <div class="rule"></div>
+      <input
+        class="search" type="search" placeholder="🔍 חיפוש בכל המדריך…"
+        value=${q} onInput=${(e) => (query.value = e.target.value)} />
+    </header>
+    ${q.trim() ? html`<${SearchResults} />` : html`<${CategoryIndex} cats=${cats} />`}
+  `;
 }
+
+function CategoryIndex({ cats }) {
+  return html`
+    <ol class="index">
+      ${cats.map((c, i) => html`
+        <li key=${c.name}>
+          <a class="idx-row" href=${"#/c/" + encodeURIComponent(c.name)}>
+            <span class="no">${String(i + 1).padStart(2, "0")}</span>
+            <span class="nm">${c.emoji} ${c.name}</span>
+            <span class="ct">${c.items.length} המלצות</span>
+          </a>
+        </li>`)}
+    </ol>`;
+}
+
+function SearchResults() { return html`<div></div>`; } // Task 8
 
 function CategoryPage() { return html`<p>category — Task 6</p>`; }
 function BottomSheet() { return null; }

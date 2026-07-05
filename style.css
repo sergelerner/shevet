@@ -14,3 +14,24 @@ h1, h2, h3, .no, .back, button { font-family: var(--rubik); }
 a { color: inherit; text-decoration: none; }
 .rule { border-top: 1.5px solid var(--ink); margin: 14px 0; }
 .center { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; padding: 0 24px; }
+
+/* masthead */
+.masthead h1 { font-size: 44px; font-weight: 900; letter-spacing: -1px; margin: 0; line-height: 1; }
+.masthead .dot { color: var(--accent); }
+.kicker { font-size: 12px; letter-spacing: 2px; color: var(--muted); margin: 6px 0 0; }
+.search {
+  width: 100%; border: 0; border-bottom: 1.5px solid var(--ink); background: transparent;
+  font: 15px var(--open); color: var(--ink); padding: 10px 2px; outline: none; border-radius: 0;
+}
+.search::placeholder { color: var(--muted); }
+
+/* category index */
+.index { list-style: none; margin: 10px 0 0; padding: 0; }
+.idx-row {
+  display: flex; align-items: baseline; gap: 14px;
+  padding: 15px 2px; border-bottom: 0.5px solid var(--hair);
+}
+.idx-row:active { background: rgba(193, 78, 51, 0.06); }
+.idx-row .no { color: var(--accent); font-size: 17px; min-width: 30px; }
+.idx-row .nm { font-family: var(--rubik); font-weight: 600; font-size: 18px; flex: 1; }
+.idx-row .ct { color: var(--muted); font-size: 12px; white-space: nowrap; }
