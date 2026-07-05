@@ -30,6 +30,10 @@ test("normalizeLink", () => {
   assert.equal(L.normalizeLink(""), null);
   // first URL wins in multi-link cells
   assert.equal(L.normalizeLink("babykaring.com/topa-top/ ; topa-top.com"), "https://babykaring.com/topa-top/");
+  // comma inside a query string must survive
+  assert.equal(L.normalizeLink("https://iherb.co/p?a=1,2"), "https://iherb.co/p?a=1,2");
+  // comma+space separated list still picks the first
+  assert.equal(L.normalizeLink("a-store.com/x, b-store.com/y"), "https://a-store.com/x");
 });
 
 test("hasWarning", () => {

@@ -26,7 +26,7 @@
 
   function normalizeLink(raw) {
     if (!raw) return null;
-    const first = raw.split(/[\s;,]+/)[0];
+    const first = raw.split(/[\s;]+/)[0].replace(/[,.]+$/, "");
     if (/^https?:\/\//i.test(first)) return first;
     if (/^[\w-]+(\.[\w-]+)+(\/\S*)?$/i.test(first)) return "https://" + first;
     return null;
