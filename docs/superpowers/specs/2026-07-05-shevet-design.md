@@ -33,6 +33,9 @@ A new flat tab named `DB` in the existing spreadsheet (`1tRYgf0smzXqIrGJ1LdA-sF2
 
 - The original tabs remain untouched as archive.
 - One-time migration: Claude parses the already-read sheet content into a clean CSV; user imports it via File → Import → Insert new sheet(s), renames the tab to `DB`.
+- Migration also folds in the two non-product tabs as categories:
+  - **מדריכים מפי נועה** (transposed layout: each column = one guide; row 1 title, row 2 body) → `category=מדריכים`, `name`=guide title, `description`=guide body.
+  - **רשימת ספרים לקטנטנים** (one-column book list) → `category=ספרים לקטנטנים`, `name`=book title, other fields empty.
 - Going forward the wife edits the `DB` tab directly (append rows).
 - Sheet stays link-readable ("anyone with the link can view") — required for the public read endpoint.
 
@@ -61,6 +64,7 @@ shevet/
 - **State** (signals): `products` (array), `route` (parsed from hash), `searchQuery`, `status` (`loading | ready | error`).
 - **Routing**: hash-based. `#/` = home; `#/c/{encodeURIComponent(category)}` = category page. `hashchange` listener updates the route signal. Browser back works; links shareable.
 - **Category config** in `config.js` maps sheet category values → emoji + sort order. Categories present in data but missing from config still render (fallback emoji, listed last) — new categories in the sheet must not break or hide data.
+- **Category order**: `מדריכים` is pinned first, then product categories, `ספרים לקטנטנים` at the end. Order is a single array in `config.js`.
 
 ## UX
 
@@ -81,6 +85,8 @@ shevet/
   - Full description, notes prefixed 📌, link as a button (🔗 פתיחת קישור, opens new tab).
   - Warning highlight: if `notes` or `description` contains "אזהרה" or "לא מומלץ", that text block gets a red-tinted callout with ⚠️.
   - Dismiss: backdrop tap, ✕ button, or drag-handle affordance (visual only; no gesture lib).
+  - Long content (e.g., guides): sheet caps at `max-height: 90vh` with internal scroll.
+- **Detail-less items** (e.g., books — no description/link/notes): render as plain list items, not tappable, no bottom sheet.
 
 ### Visual identity (approved via mockups)
 - Palette: cream `#faf5ec` background, ink `#2d2a26` text, terracotta `#c14e33` accent, muted `#8a7f6f`, hairlines `#d8ccb8`.
