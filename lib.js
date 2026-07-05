@@ -1,10 +1,16 @@
 // lib.js — pure data functions. Exposed as window.ShevetLib (browser) and module.exports (node tests).
 (function (global) {
-  function parseGviz(text) {
+  function parseGvizTable(text) {
     const json = JSON.parse(text.slice(text.indexOf("(") + 1, text.lastIndexOf(")")));
-    return json.table.rows.map((r) =>
+    const labels = json.table.cols.map((c) => (c.label || "").trim());
+    const rows = json.table.rows.map((r) =>
       (r.c || []).map((c) => (c && c.v != null ? String(c.v) : ""))
     );
+    return { labels, rows };
+  }
+
+  function parseGviz(text) {
+    return parseGvizTable(text).rows;
   }
 
   function cleanField(v) {
@@ -63,7 +69,7 @@
     );
   }
 
-  const api = { parseGviz, toProducts, normalizeLink, hasWarning, hasDetails, orderCategories, searchProducts };
+  const api = { parseGviz, parseGvizTable, toProducts, normalizeLink, hasWarning, hasDetails, orderCategories, searchProducts };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   global.ShevetLib = api;
 })(typeof window !== "undefined" ? window : globalThis);

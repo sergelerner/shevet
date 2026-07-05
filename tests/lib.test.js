@@ -3,9 +3,12 @@ const { test } = require("node:test");
 const assert = require("node:assert/strict");
 const L = require("../lib.js");
 
-const gvizWrap = (rows) =>
+const gvizWrap = (rows, cols = []) =>
   `/*O_o*/\ngoogle.visualization.Query.setResponse(${JSON.stringify({
-    table: { cols: [], rows: rows.map((r) => ({ c: r.map((v) => (v == null ? null : { v })) })) },
+    table: {
+      cols: cols.map((label) => ({ label })),
+      rows: rows.map((r) => ({ c: r.map((v) => (v == null ? null : { v })) })),
+    },
   })});`;
 
 test("parseGviz + toProducts: cleans placeholders, drops nameless rows", () => {
@@ -21,6 +24,17 @@ test("parseGviz + toProducts: cleans placeholders, drops nameless rows", () => {
     description: "תיאור\nרב שורתי", link: "lunalubabies.com", notes: "",
   });
   assert.equal(products[1].link, "");
+});
+
+test("parseGvizTable: returns cols labels alongside rows", () => {
+  const text = gvizWrap(
+    [["מנשאים", "מנשא Neko", "תיאור", "lunalubabies.com", ""]],
+    ["category", "name", "description", "link", "notes"]
+  );
+  const { labels, rows } = L.parseGvizTable(text);
+  assert.deepEqual(labels, ["category", "name", "description", "link", "notes"]);
+  assert.equal(rows.length, 1);
+  assert.deepEqual(rows[0], ["מנשאים", "מנשא Neko", "תיאור", "lunalubabies.com", ""]);
 });
 
 test("normalizeLink", () => {
