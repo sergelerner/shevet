@@ -1,6 +1,6 @@
 // app.js — SHEVET application.
 const { h, render } = preact;
-const { signal } = preactSignals;
+const { signal, effect } = preactSignals;
 const html = htm.bind(h);
 const L = window.ShevetLib;
 const CFG = window.SHEVET_CONFIG;
@@ -10,6 +10,11 @@ const products = signal([]);
 const status = signal("loading"); // loading | ready | error
 const query = signal("");
 const selected = signal(null); // product shown in the bottom sheet
+
+// lock background scroll while the bottom sheet is open
+effect(() => {
+  document.body.style.overflow = selected.value ? "hidden" : "";
+});
 
 function parseHash() {
   const hash = decodeURIComponent(location.hash.slice(1) || "/");
