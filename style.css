@@ -69,6 +69,18 @@ button.pcard:active { border-color: var(--accent); }
   animation: rise 0.22s ease-out;
 }
 @keyframes rise { from { transform: translateY(40%); } to { transform: translateY(0); } }
+
+/* desktop: centered modal instead of bottom sheet */
+@media (min-width: 700px) {
+  .backdrop { align-items: center; padding: 32px; }
+  .sheet {
+    max-width: 520px; border-radius: 18px; max-height: 80vh;
+    padding-top: 16px; animation: pop 0.18s ease-out;
+    box-shadow: 0 12px 40px rgba(45, 42, 38, 0.25);
+  }
+  .handle { display: none; }
+}
+@keyframes pop { from { transform: scale(0.96); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .handle { width: 36px; height: 4px; border-radius: 4px; background: var(--hair); margin: 4px auto 12px; }
 .sheet h3 { font-size: 21px; font-weight: 600; margin: 0 0 4px; padding-left: 32px; }
 .sheet .chip {
