@@ -114,13 +114,24 @@ function emojiHex(emoji) {
     .join("-");
 }
 
-function Emoji({ e }) {
+function Emoji({ e, inline }) {
   const [failed, setFailed] = preactHooks.useState(false);
   if (failed) return html`<span class="cat-icon-txt">${e}</span>`;
   return html`<img
-    class="cat-icon" alt="" loading="lazy"
-    src=${"https://cdn.jsdelivr.net/npm/openmoji@15.1.0/black/svg/" + emojiHex(e) + ".svg"}
+    class=${"cat-icon" + (inline ? " inline" : "")} alt="" loading="lazy"
+    src=${"https://cdn.jsdelivr.net/npm/openmoji@15.1.0/color/svg/" + emojiHex(e) + ".svg"}
     onError=${() => setFailed(true)} />`;
+}
+
+// Renders text from the sheet, swapping any embedded emoji for OpenMoji icons.
+const EMOJI_RE =
+  /(\p{Extended_Pictographic}(?:[\u{1F3FB}-\u{1F3FF}]|️)*(?:‍\p{Extended_Pictographic}(?:[\u{1F3FB}-\u{1F3FF}]|️)*)*)/gu;
+
+function EmojiText({ text }) {
+  if (!text) return null;
+  return String(text)
+    .split(EMOJI_RE)
+    .map((part, i) => (i % 2 ? html`<${Emoji} e=${part} inline key=${i} />` : part));
 }
 
 function CategoryIndex({ cats }) {
@@ -139,7 +150,7 @@ function CategoryIndex({ cats }) {
 
 function SearchResults() {
   const results = L.searchProducts(products.value, query.value);
-  if (!results.length) return html`<p class="empty">לא נמצאו תוצאות 🤷‍♀️</p>`;
+  if (!results.length) return html`<p class="empty"><${EmojiText} text=${"לא נמצאו תוצאות 🤷🏻‍♀️"} /></p>`;
   return html`
     <div class="results">
       ${results.map((p) => html`
@@ -169,12 +180,12 @@ function CategoryPage({ name }) {
 
 function ProductCard({ product: p }) {
   if (!L.hasDetails(p)) {
-    return html`<div class="pcard plain"><b>${p.name}</b></div>`;
+    return html`<div class="pcard plain"><b><${EmojiText} text=${p.name} /></b></div>`;
   }
   return html`
     <button type="button" class="pcard" onClick=${() => (selected.value = p)}>
-      <b>${p.name}</b>
-      ${p.description && html`<p class="desc clamp">${p.description}</p>`}
+      <b><${EmojiText} text=${p.name} /></b>
+      ${p.description && html`<p class="desc clamp"><${EmojiText} text=${p.description} /></p>`}
     </button>`;
 }
 
@@ -186,15 +197,15 @@ function BottomSheet({ product: p }) {
       <div class="sheet" onClick=${(e) => e.stopPropagation()}>
         <div class="handle"></div>
         <button class="close" onClick=${close} aria-label="סגירה">✕</button>
-        <h3>${p.name}</h3>
+        <h3><${EmojiText} text=${p.name} /></h3>
         <p class="chip">${p.category}</p>
         <div class="sheet-scroll">
           ${p.description && html`
-            <p class=${"sheet-desc" + (L.hasWarning(p.description) ? " warn" : "")}>${p.description}</p>`}
+            <p class=${"sheet-desc" + (L.hasWarning(p.description) ? " warn" : "")}><${EmojiText} text=${p.description} /></p>`}
           ${p.notes && html`
             <p class=${"sheet-notes" + (L.hasWarning(p.notes) ? " warn" : "")}>
-              ${L.hasWarning(p.notes) ? "⚠️ " : "📌 "}${p.notes}</p>`}
-          ${p.link && !href && html`<p class="sheet-notes">🔗 ${p.link}</p>`}
+              <${EmojiText} text=${(L.hasWarning(p.notes) ? "⚠️ " : "📌 ") + p.notes} /></p>`}
+          ${p.link && !href && html`<p class="sheet-notes"><${EmojiText} text=${"🔗 " + p.link} /></p>`}
         </div>
         ${href && html`
           <a class="linkbtn" href=${href} target="_blank" rel="noopener">🔗 פתיחת קישור</a>`}

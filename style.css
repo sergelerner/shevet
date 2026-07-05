@@ -1,6 +1,9 @@
 :root {
-  --bg: #faf5ec; --ink: #2d2a26; --accent: #c14e33;
-  --muted: #8a7f6f; --hair: #d8ccb8; --card: #fff;
+  /* "Rich & Earthy" palette: old rose #C7908E, pear skin #D6C7A0, driftwood #A2947A,
+     morning fog #ABB2AB, soft peach #D3A583, dirt patch #83715B */
+  --bg: #faf5ee; --ink: #443930; --accent: #c7908e; --accent-text: #a96f6b;
+  --muted: #a2947a; --hair: #d6c7a0; --card: #fffdf8;
+  --peach: #d3a583; --fog: #abb2ab; --dirt: #83715b;
   --rubik: "Rubik", sans-serif; --open: "Open Sans", sans-serif;
 }
 * { box-sizing: border-box; }
@@ -30,23 +33,24 @@ a { color: inherit; text-decoration: none; }
 .credit { margin-top: 40px; font-size: 11px; color: var(--muted); text-align: center; }
 .credit a { text-decoration: underline; }
 
-/* OpenMoji outline icons — scale with surrounding text */
-.cat-icon { width: 1.15em; height: 1.15em; vertical-align: -0.18em; margin-inline-end: 2px; }
+/* OpenMoji icons — scale with surrounding text */
+.cat-icon { width: 1.5em; height: 1.5em; vertical-align: -0.35em; margin-inline-end: 2px; }
+.cat-icon.inline { width: 1.2em; height: 1.2em; vertical-align: -0.25em; margin-inline-end: 0; }
 
 /* category index */
 .index { list-style: none; margin: 10px 0 0; padding: 0; }
 .idx-row {
-  display: flex; align-items: baseline; gap: 14px;
+  display: flex; align-items: baseline;
   padding: 15px 2px; border-bottom: 0.5px solid var(--hair);
 }
-.idx-row:active { background: rgba(193, 78, 51, 0.06); }
-.idx-row .no { color: var(--accent); font-size: 17px; min-width: 30px; }
+.idx-row:active { background: rgba(199, 144, 142, 0.12); }
+.idx-row .no { color: var(--accent-text); font-size: 17px; min-width: 30px; }
 .idx-row .nm { font-family: var(--rubik); font-weight: 600; font-size: 18px; flex: 1; }
 .idx-row .ct { color: var(--muted); font-size: 12px; white-space: nowrap; }
 
 /* category page */
 .cat-head h2 { font-size: 26px; font-weight: 600; margin: 10px 0 0; }
-.back { color: var(--accent); font-size: 14px; font-weight: 500; }
+.back { color: var(--accent-text); font-size: 14px; font-weight: 500; }
 .empty { color: var(--muted); text-align: center; padding: 32px 0; }
 
 /* product cards */
@@ -57,7 +61,7 @@ a { color: inherit; text-decoration: none; }
   font-family: var(--open); color: var(--ink);
 }
 .pcard b { font-family: var(--rubik); font-weight: 600; font-size: 16.5px; display: block; }
-.pcard .desc { color: #5c554b; font-size: 14px; margin: 4px 0 0; }
+.pcard .desc { color: #6b5d4c; font-size: 14px; margin: 4px 0 0; }
 .pcard.plain { cursor: default; padding: 12px 16px; }
 .clamp {
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
@@ -83,7 +87,7 @@ button.pcard:active { border-color: var(--accent); }
   .backdrop { align-items: center; padding: 32px; }
   .sheet {
     max-width: 520px; border-radius: 18px; max-height: 80vh;
-    padding-top: 16px; animation: pop 0.18s ease-out;
+    padding: 30px 60px 60px 60px; animation: pop 0.18s ease-out;
     box-shadow: 0 12px 40px rgba(45, 42, 38, 0.25);
   }
   .handle { display: none; }
@@ -92,7 +96,7 @@ button.pcard:active { border-color: var(--accent); }
 .handle { width: 36px; height: 4px; border-radius: 4px; background: var(--hair); margin: 4px auto 12px; }
 .sheet h3 { font-size: 21px; font-weight: 600; margin: 0 0 4px; padding-left: 32px; }
 .sheet .chip {
-  display: inline-block; font-size: 11.5px; color: var(--accent);
+  display: inline-block; font-size: 11.5px; color: var(--accent-text);
   border: 1px solid var(--accent); border-radius: 999px; padding: 1px 10px; margin: 0 0 10px;
 }
 .sheet .close {
@@ -102,12 +106,12 @@ button.pcard:active { border-color: var(--accent); }
 .sheet-scroll { overflow-y: auto; flex: 1; }
 .sheet-desc { white-space: pre-line; font-size: 15px; margin: 0 0 12px; }
 .sheet-notes {
-  white-space: pre-line; font-size: 14px; color: #6b6355;
-  background: #fff; border-radius: 10px; padding: 10px 12px; margin: 0 0 12px;
+  white-space: pre-line; font-size: 14px; color: #6b5d4c;
+  background: var(--card); border-radius: 10px; padding: 10px 12px; margin: 0 0 12px;
 }
-.warn { background: #fbebe8; color: #8f2c18; border-radius: 10px; padding: 10px 12px; }
+.warn { background: #f3e3e2; color: #8a4f4b; border-radius: 10px; padding: 10px 12px; }
 .linkbtn {
-  display: block; text-align: center; background: var(--accent); color: #fff;
+  display: block; text-align: center; background: var(--peach); color: var(--ink);
   font-family: var(--rubik); font-weight: 500; border-radius: 12px; padding: 13px; margin-top: 4px;
 }
 
