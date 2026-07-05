@@ -12,7 +12,7 @@ Preact + htm + @preact/signals via CDN `<script>` tags. No build, no npm.
 python3 -m http.server 8090   # then open http://localhost:8090
 
 ## Test
-node --test tests/
+node --test tests/*.test.*
 
 ## Deploy
 git push (GitHub Pages serves `main`).
