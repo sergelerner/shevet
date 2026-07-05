@@ -49,6 +49,51 @@ test("parseStackedTab: category headers, column headers, products", () => {
   });
 });
 
+test("parseStackedTab skips header rows with 'שם / תחום' phrasing", () => {
+  const rows = [
+    ["🎒 קטגוריית מנשאים", "", "", ""],
+    ["שם / תחום", "תיאור והמלצות מהקבוצה", "לינק / מקור", "הערות"],
+    ["מנשא Neko Switch", "ילקוט פיזיולוגי", "lunalubabies.com", "-"],
+  ];
+  const out = parseStackedTab(rows);
+  assert.equal(out.length, 1);
+  assert.equal(out[0].name, "מנשא Neko Switch");
+});
+
+test("parseStackedTab skips header rows with 'שם / נושא' phrasing", () => {
+  const rows = [
+    ["🎒 קטגוריית מנשאים", "", "", ""],
+    ["שם / נושא", "תיאור והמלצות מהקבוצה", "לינק / מקור", "הערות"],
+    ["מנשא Neko Switch", "ילקוט פיזיולוגי", "lunalubabies.com", "-"],
+  ];
+  const out = parseStackedTab(rows);
+  assert.equal(out.length, 1);
+  assert.equal(out[0].name, "מנשא Neko Switch");
+});
+
+test("parseStackedTab strips leading dashes from link fields only", () => {
+  const rows = [
+    ["🎒 קטגוריית מנשאים", "", "", ""],
+    ["שם המוצר / המותג", "תיאור", "לינק", "הערות"],
+    ["מנשא with dash link", "תיאור רגיל", "-www.example.com", "הערות עם - מקפים"],
+  ];
+  const out = parseStackedTab(rows);
+  assert.equal(out.length, 1);
+  assert.equal(out[0].link, "www.example.com");
+  assert.equal(out[0].notes, "הערות עם - מקפים"); // dash in notes is preserved
+});
+
+test("parseStackedTab keeps plain dash '-' in link as empty", () => {
+  const rows = [
+    ["🎒 קטגוריית מנשאים", "", "", ""],
+    ["שם המוצר / המותג", "תיאור", "לינק", "הערות"],
+    ["מנשא", "תיאור", "-", "הערות"],
+  ];
+  const out = parseStackedTab(rows);
+  assert.equal(out.length, 1);
+  assert.equal(out[0].link, "");
+});
+
 test("parseStackedTab skips rows before any category header", () => {
   assert.deepEqual(parseStackedTab([["מוצר יתום", "תיאור", "", ""]]), []);
 });

@@ -36,6 +36,13 @@ function cleanField(v) {
   return t === "-" || t === "\\-" ? "" : t;
 }
 
+/** Clean link fields: strip leading dashes (only when followed by more text). */
+function cleanLink(v) {
+  const t = cleanField(v);
+  if (!t) return t; // already empty
+  return t.replace(/^[\-]+(?=\S)/, "");
+}
+
 export function parseStackedTab(rows) {
   const products = [];
   let category = null;
@@ -43,11 +50,11 @@ export function parseStackedTab(rows) {
     const vals = cells.map((c) => (c || "").trim());
     if (!vals.some(Boolean)) continue;
     if (vals[0].includes("קטגוריית")) { category = stripCategory(vals[0]); continue; }
-    if (vals[0].startsWith("שם המוצר")) continue;
+    if (/^שם(\s*\/|\s+המוצר)/.test(vals[0])) continue; // skip all header phrasings
     if (!category || !vals[0]) continue;
     products.push({
       category, name: vals[0],
-      description: cleanField(vals[1]), link: cleanField(vals[2]), notes: cleanField(vals[3]),
+      description: cleanField(vals[1]), link: cleanLink(vals[2]), notes: cleanField(vals[3]),
     });
   }
   return products;
