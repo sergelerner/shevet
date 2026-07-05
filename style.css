@@ -56,3 +56,37 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
 }
 button.pcard:active { border-color: var(--accent); }
+
+/* bottom sheet */
+.backdrop {
+  position: fixed; inset: 0; background: rgba(45, 42, 38, 0.45);
+  display: flex; align-items: flex-end; z-index: 10;
+}
+.sheet {
+  background: var(--bg); width: 100%; max-width: 640px; margin: 0 auto;
+  border-radius: 18px 18px 0 0; padding: 10px 20px 20px; position: relative;
+  max-height: 85vh; max-height: 85dvh; display: flex; flex-direction: column;
+  animation: rise 0.22s ease-out;
+}
+@keyframes rise { from { transform: translateY(40%); } to { transform: translateY(0); } }
+.handle { width: 36px; height: 4px; border-radius: 4px; background: var(--hair); margin: 4px auto 12px; }
+.sheet h3 { font-size: 21px; font-weight: 600; margin: 0 0 4px; padding-left: 32px; }
+.sheet .chip {
+  display: inline-block; font-size: 11.5px; color: var(--accent);
+  border: 1px solid var(--accent); border-radius: 999px; padding: 1px 10px; margin: 0 0 10px;
+}
+.sheet .close {
+  position: absolute; top: 14px; left: 14px; border: 0; background: transparent;
+  font-size: 17px; color: var(--muted); cursor: pointer; padding: 6px;
+}
+.sheet-scroll { overflow-y: auto; flex: 1; }
+.sheet-desc { white-space: pre-line; font-size: 15px; margin: 0 0 12px; }
+.sheet-notes {
+  white-space: pre-line; font-size: 14px; color: #6b6355;
+  background: #fff; border-radius: 10px; padding: 10px 12px; margin: 0 0 12px;
+}
+.warn { background: #fbebe8; color: #8f2c18; border-radius: 10px; padding: 10px 12px; }
+.linkbtn {
+  display: block; text-align: center; background: var(--accent); color: #fff;
+  font-family: var(--rubik); font-weight: 500; border-radius: 12px; padding: 13px; margin-top: 4px;
+}

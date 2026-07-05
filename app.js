@@ -125,7 +125,29 @@ function ProductCard({ product: p }) {
     </button>`;
 }
 
-function BottomSheet() { return null; }
+function BottomSheet({ product: p }) {
+  const href = L.normalizeLink(p.link);
+  const close = () => (selected.value = null);
+  return html`
+    <div class="backdrop" onClick=${close}>
+      <div class="sheet" onClick=${(e) => e.stopPropagation()}>
+        <div class="handle"></div>
+        <button class="close" onClick=${close} aria-label="סגירה">✕</button>
+        <h3>${p.name}</h3>
+        <p class="chip">${p.category}</p>
+        <div class="sheet-scroll">
+          ${p.description && html`
+            <p class=${"sheet-desc" + (L.hasWarning(p.description) ? " warn" : "")}>${p.description}</p>`}
+          ${p.notes && html`
+            <p class=${"sheet-notes" + (L.hasWarning(p.notes) ? " warn" : "")}>
+              ${L.hasWarning(p.notes) ? "⚠️ " : "📌 "}${p.notes}</p>`}
+          ${p.link && !href && html`<p class="sheet-notes">🔗 ${p.link}</p>`}
+        </div>
+        ${href && html`
+          <a class="linkbtn" href=${href} target="_blank" rel="noopener">🔗 פתיחת קישור</a>`}
+      </div>
+    </div>`;
+}
 
 function App() {
   if (status.value === "loading") return html`<${Loading} />`;
