@@ -2,7 +2,7 @@
 window.SHEVET_CONFIG = {
   SHEET_ID: "1tRYgf0smzXqIrGJ1LdA-sF26Q3H8Zrw9zgbhrjlxZEM",
   TAB: "DB",
-  TITLE: "שבט",
+  TITLE: "שֵׁבֶט",
   KICKER: "ההמלצות של הקבוצה",
   CATEGORIES: [
     { name: "מדריכים", emoji: "🧭" },
