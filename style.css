@@ -16,7 +16,7 @@ a { color: inherit; text-decoration: none; }
 .center { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; padding: 0 24px; }
 
 /* masthead */
-.masthead h1 { font-size: 44px; font-weight: 900; letter-spacing: -1px; margin: 0; line-height: 1; }
+.masthead h1 { font-family: "Frank Ruhl Libre", serif; font-size: 44px; font-weight: 900; letter-spacing: -1px; margin: 0; line-height: 1; }
 .masthead .dot { color: var(--accent); }
 .kicker { font-size: 12px; letter-spacing: 2px; color: var(--muted); margin: 6px 0 0; }
 .search {
