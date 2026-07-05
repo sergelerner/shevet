@@ -100,7 +100,18 @@ function CategoryIndex({ cats }) {
     </ol>`;
 }
 
-function SearchResults() { return html`<div></div>`; } // Task 8
+function SearchResults() {
+  const results = L.searchProducts(products.value, query.value);
+  if (!results.length) return html`<p class="empty">לא נמצאו תוצאות 🤷‍♀️</p>`;
+  return html`
+    <div class="results">
+      ${results.map((p) => html`
+        <div key=${p.category + "|" + p.name} class="result-wrap">
+          <${ProductCard} product=${p} />
+          <span class="result-chip">${p.category}</span>
+        </div>`)}
+    </div>`;
+}
 
 function CategoryPage({ name }) {
   const items = products.value.filter((p) => p.category === name);

@@ -90,3 +90,13 @@ button.pcard:active { border-color: var(--accent); }
   display: block; text-align: center; background: var(--accent); color: #fff;
   font-family: var(--rubik); font-weight: 500; border-radius: 12px; padding: 13px; margin-top: 4px;
 }
+
+/* search results */
+.results { margin-top: 14px; }
+.result-wrap { position: relative; }
+.result-chip {
+  position: absolute; top: 12px; left: 14px; font-size: 10.5px;
+  color: var(--muted); border: 1px solid var(--hair); border-radius: 999px; padding: 0 8px;
+  background: var(--card); pointer-events: none;
+}
+.result-wrap .pcard b { padding-left: 90px; }
