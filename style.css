@@ -16,6 +16,8 @@ a { color: inherit; text-decoration: none; }
 .center { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; padding: 0 24px; }
 
 /* masthead */
+.mast-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.logo { height: 72px; width: auto; flex-shrink: 0; }
 .masthead h1 { font-family: "Frank Ruhl Libre", serif; font-size: 44px; font-weight: 900; letter-spacing: -1px; margin: 0; line-height: 1; }
 .masthead .dot { color: var(--accent); }
 .kicker { font-size: 12px; letter-spacing: 2px; color: var(--muted); margin: 6px 0 0; }
@@ -24,6 +26,12 @@ a { color: inherit; text-decoration: none; }
   font: 15px var(--open); color: var(--ink); padding: 10px 2px; outline: none; border-radius: 0;
 }
 .search::placeholder { color: var(--muted); }
+
+.credit { margin-top: 40px; font-size: 11px; color: var(--muted); text-align: center; }
+.credit a { text-decoration: underline; }
+
+/* OpenMoji outline icons — scale with surrounding text */
+.cat-icon { width: 1.15em; height: 1.15em; vertical-align: -0.18em; margin-inline-end: 2px; }
 
 /* category index */
 .index { list-style: none; margin: 10px 0 0; padding: 0; }

@@ -86,8 +86,13 @@ function Home() {
   const q = query.value;
   return html`
     <header class="masthead">
-      <h1>${CFG.TITLE}<span class="dot">.</span></h1>
-      <p class="kicker">${CFG.KICKER} · ${products.value.length} המלצות</p>
+      <div class="mast-row">
+        <div>
+          <h1>${CFG.TITLE}<span class="dot">.</span></h1>
+          <p class="kicker">${CFG.KICKER} · ${products.value.length} המלצות</p>
+        </div>
+        <img class="logo" src="assets/logo.png" alt="" />
+      </div>
       <div class="rule"></div>
       <input
         class="search" type="search" placeholder="🔍 חיפוש בכל המדריך…"
@@ -97,6 +102,27 @@ function Home() {
   `;
 }
 
+// OpenMoji Black outline icons (CC BY-SA 4.0, openmoji.org); falls back to the
+// native emoji if the CDN misses a glyph. Filename convention: codepoints joined
+// by "-", FE0F kept only inside ZWJ sequences.
+function emojiHex(emoji) {
+  const cps = [...emoji].map((c) => c.codePointAt(0));
+  const hasZwj = cps.includes(0x200d);
+  return cps
+    .filter((cp) => hasZwj || cp !== 0xfe0f)
+    .map((cp) => cp.toString(16).toUpperCase().padStart(4, "0"))
+    .join("-");
+}
+
+function Emoji({ e }) {
+  const [failed, setFailed] = preactHooks.useState(false);
+  if (failed) return html`<span class="cat-icon-txt">${e}</span>`;
+  return html`<img
+    class="cat-icon" alt="" loading="lazy"
+    src=${"https://cdn.jsdelivr.net/npm/openmoji@15.1.0/black/svg/" + emojiHex(e) + ".svg"}
+    onError=${() => setFailed(true)} />`;
+}
+
 function CategoryIndex({ cats }) {
   return html`
     <ol class="index">
@@ -104,7 +130,7 @@ function CategoryIndex({ cats }) {
         <li key=${c.name}>
           <a class="idx-row" href=${"#/c/" + encodeURIComponent(c.name)}>
             <span class="no">${String(i + 1).padStart(2, "0")}</span>
-            <span class="nm">${c.emoji} ${c.name}</span>
+            <span class="nm"><${Emoji} e=${c.emoji} /> ${c.name}</span>
             <span class="ct">${c.items.length} המלצות</span>
           </a>
         </li>`)}
@@ -131,7 +157,7 @@ function CategoryPage({ name }) {
   return html`
     <header class="cat-head">
       <a class="back" href="#/">→ חזרה</a>
-      <h2>${emoji} ${name}</h2>
+      <h2><${Emoji} e=${emoji} /> ${name}</h2>
       <p class="kicker">${items.length} המלצות</p>
       <div class="rule"></div>
     </header>
@@ -185,6 +211,9 @@ function App() {
       ${r.page === "home"
         ? html`<${Home} />`
         : html`<${CategoryPage} name=${r.category} />`}
+      <footer class="credit">
+        אייקונים: <a href="https://openmoji.org" target="_blank" rel="noopener">OpenMoji</a> (CC BY-SA 4.0)
+      </footer>
       ${selected.value && html`<${BottomSheet} product=${selected.value} />`}
     </div>`;
 }

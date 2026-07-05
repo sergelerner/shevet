@@ -21,3 +21,6 @@ git push (GitHub Pages serves `main`).
 - Edit content: add rows to the `DB` tab of the sheet (category, name, description, link, notes).
 - New category: add a row value in the sheet + an entry in `config.js` CATEGORIES (order = display order).
 - `scripts/build-db-csv.mjs` was the one-time migration that generated `data/db.csv` from the original tabs.
+
+## Credits
+Category icons: [OpenMoji](https://openmoji.org) — CC BY-SA 4.0 (black/outline variant, loaded from jsDelivr).
