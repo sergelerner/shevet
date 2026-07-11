@@ -149,3 +149,31 @@ button.pcard:active { border-color: var(--accent); transform: translateY(0); box
   background: var(--ink); color: var(--bg); border: 0; border-radius: 12px;
   font: 500 15px var(--rubik); padding: 12px 28px; margin-top: 10px; cursor: pointer;
 }
+
+/* add-item */
+.fab {
+  position: fixed; bottom: 24px; inset-inline-end: 20px; z-index: 5;
+  width: 56px; height: 56px; border-radius: 50%; border: 0;
+  background: var(--accent); color: var(--card); font-size: 32px; line-height: 1;
+  cursor: pointer; box-shadow: 0 6px 18px rgba(131, 113, 91, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+@media (hover: hover) {
+  .fab:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(131, 113, 91, 0.4); }
+}
+.fab:active { transform: translateY(0); }
+
+.add-form { display: flex; flex-direction: column; gap: 12px; padding-top: 6px; }
+.add-form label { display: flex; flex-direction: column; gap: 4px; font: 500 13px var(--rubik); color: var(--dirt); }
+.add-form input, .add-form textarea, .add-form select {
+  border: 1px solid var(--hair); border-radius: 10px; background: var(--card);
+  font: 15px var(--open); color: var(--ink); padding: 10px 12px; outline: none;
+}
+.add-form input:focus, .add-form textarea:focus, .add-form select:focus { border-color: var(--accent); }
+.add-form textarea { resize: vertical; }
+.add-form .submit { border: 0; cursor: pointer; font-size: 15px; }
+.add-form .submit:disabled { opacity: 0.6; cursor: default; }
+.form-error { color: #8a4f4b; background: #f3e3e2; border-radius: 10px; padding: 10px 12px; margin: 0; font-size: 14px; }
+
+/* honeypot — off-screen, invisible to humans */
+.hp { position: absolute; inset-inline-start: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none; }

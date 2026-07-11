@@ -10,10 +10,11 @@ const products = signal([]);
 const status = signal("loading"); // loading | ready | error
 const query = signal("");
 const selected = signal(null); // product shown in the bottom sheet
+const adding = signal(false); // add-item form open?
 
 // lock background scroll while the bottom sheet is open
 effect(() => {
-  document.body.style.overflow = selected.value ? "hidden" : "";
+  document.body.style.overflow = selected.value || adding.value ? "hidden" : "";
 });
 
 function parseHash() {
@@ -25,6 +26,7 @@ const route = signal(parseHash());
 window.addEventListener("hashchange", () => {
   route.value = parseHash();
   selected.value = null;
+  adding.value = false;
   window.scrollTo(0, 0);
 });
 
@@ -213,6 +215,69 @@ function BottomSheet({ product: p }) {
     </div>`;
 }
 
+function AddForm() {
+  const preset = route.value.page === "category" ? route.value.category : CFG.CATEGORIES[0].name;
+  const [form, setForm] = preactHooks.useState({
+    category: preset, name: "", description: "", link: "", website: "",
+  });
+  const [sending, setSending] = preactHooks.useState(false);
+  const [error, setError] = preactHooks.useState("");
+  const close = () => (adding.value = false);
+  const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
+
+  async function submit(e) {
+    e.preventDefault();
+    const built = L.buildSubmission(form);
+    if (!built.ok) { setError(built.error); return; }
+    setSending(true); setError("");
+    try {
+      // string body => text/plain => no CORS preflight (Apps Script can't answer one)
+      const res = await fetch(CFG.SUBMIT_URL, { method: "POST", body: JSON.stringify(built.payload) });
+      const reply = JSON.parse(await res.text());
+      if (!reply.ok) throw new Error(reply.error || "submit failed");
+      const fresh = [...products.value, built.product];
+      products.value = fresh;
+      localStorage.setItem(CACHE_KEY, JSON.stringify(fresh));
+      close();
+    } catch (err) {
+      console.error("submit failed:", err);
+      setError("לא הצלחנו לשלוח, נסו שוב");
+      setSending(false);
+    }
+  }
+
+  return html`
+    <div class="backdrop" onClick=${close}>
+      <div class="sheet" onClick=${(e) => e.stopPropagation()}>
+        <div class="handle"></div>
+        <button class="close" onClick=${close} aria-label="סגירה">✕</button>
+        <h3>הוספת המלצה</h3>
+        <form class="add-form sheet-scroll" onSubmit=${submit}>
+          <label>קטגוריה
+            <select value=${form.category} onChange=${set("category")}>
+              ${CFG.CATEGORIES.map((c) => html`<option value=${c.name} key=${c.name}>${c.emoji} ${c.name}</option>`)}
+            </select>
+          </label>
+          <label>שם *
+            <input type="text" value=${form.name} onInput=${set("name")} required placeholder="שם המוצר או ההמלצה" />
+          </label>
+          <label>תיאור
+            <textarea rows="3" value=${form.description} onInput=${set("description")} placeholder="למה זה מומלץ?"></textarea>
+          </label>
+          <label>קישור
+            <input type="text" inputmode="url" value=${form.link} onInput=${set("link")} placeholder="https://…" />
+          </label>
+          <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off"
+            aria-hidden="true" value=${form.website} onInput=${set("website")} />
+          ${error && html`<p class="form-error">${error}</p>`}
+          <button class="linkbtn submit" type="submit" disabled=${sending}>
+            ${sending ? "שולח…" : "הוספה"}
+          </button>
+        </form>
+      </div>
+    </div>`;
+}
+
 function App() {
   if (status.value === "loading") return html`<${Loading} />`;
   if (status.value === "error") return html`<${ErrorScreen} />`;
@@ -226,6 +291,9 @@ function App() {
         אייקונים: <a href="https://openmoji.org" target="_blank" rel="noopener">OpenMoji</a> (CC BY-SA 4.0)
       </footer>
       ${selected.value && html`<${BottomSheet} product=${selected.value} />`}
+      ${CFG.SUBMIT_URL && !selected.value && !adding.value && html`
+        <button class="fab" onClick=${() => (adding.value = true)} aria-label="הוספת המלצה">+</button>`}
+      ${adding.value && html`<${AddForm} />`}
     </div>`;
 }
 
