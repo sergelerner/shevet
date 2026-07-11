@@ -34,5 +34,5 @@ window.SHEVET_CONFIG = {
   ],
   FALLBACK_EMOJI: "📦",
   // Apps Script /exec URL for the add-item form; empty = button hidden.
-  SUBMIT_URL: "",
+  SUBMIT_URL: "https://script.google.com/macros/s/AKfycbxiJ0SU-pFt66oVLHbN0VFgvYp9PGDBqsOWCKa5x1JGMcfpBOBofwarqCaVDqClYH3njw/exec",
 };
