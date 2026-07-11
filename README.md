@@ -15,7 +15,9 @@ python3 -m http.server 8090   # then open http://localhost:8090
 node --test tests/*.test.*
 
 ## Deploy
-git push (GitHub Pages serves `main`).
+git push (GitHub Pages serves `main`). When changing `config.js`/`lib.js`/`app.js`/`style.css`,
+bump the `?v=N` query in `index.html` so cached browsers pick up all files together
+(GitHub Pages caches for 10 minutes).
 
 ## Data
 - Edit content: add rows to the `DB` tab of the sheet (category, name, description, link, notes).
