@@ -69,7 +69,20 @@
     );
   }
 
-  const api = { parseGviz, parseGvizTable, toProducts, normalizeLink, hasWarning, hasDetails, orderCategories, searchProducts };
+  function buildSubmission(fields) {
+    const f = fields || {};
+    const t = (v) => String(v == null ? "" : v).trim();
+    const category = t(f.category), name = t(f.name),
+      description = t(f.description), link = t(f.link), website = t(f.website);
+    if (!name) return { ok: false, error: "צריך למלא שם" };
+    return {
+      ok: true,
+      payload: { category, name, description, link, website },
+      product: { category, name, description, link, notes: "" },
+    };
+  }
+
+  const api = { parseGviz, parseGvizTable, toProducts, normalizeLink, hasWarning, hasDetails, orderCategories, searchProducts, buildSubmission };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   global.ShevetLib = api;
 })(typeof window !== "undefined" ? window : globalThis);

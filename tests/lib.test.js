@@ -84,3 +84,33 @@ test("searchProducts: case-insensitive over name+description, empty query -> []"
   assert.equal(L.searchProducts(products, "פטמה").length, 1);
   assert.equal(L.searchProducts(products, "  ").length, 0);
 });
+
+test("buildSubmission: trims fields, requires name, builds payload + product", () => {
+  const bad = L.buildSubmission({ category: "מנשאים", name: "  ", description: "", link: "", website: "" });
+  assert.equal(bad.ok, false);
+  assert.ok(bad.error);
+
+  const good = L.buildSubmission({
+    category: " מנשאים ", name: " מנשא חדש ", description: " נוח מאוד ",
+    link: " lunalubabies.com ", website: "",
+  });
+  assert.equal(good.ok, true);
+  assert.deepEqual(good.payload, {
+    category: "מנשאים", name: "מנשא חדש", description: "נוח מאוד",
+    link: "lunalubabies.com", website: "",
+  });
+  assert.deepEqual(good.product, {
+    category: "מנשאים", name: "מנשא חדש", description: "נוח מאוד",
+    link: "lunalubabies.com", notes: "",
+  });
+
+  // honeypot value is carried through untouched for the server to judge
+  const bot = L.buildSubmission({ category: "מנשאים", name: "spam", description: "", link: "", website: "http://spam.example" });
+  assert.equal(bot.ok, true);
+  assert.equal(bot.payload.website, "http://spam.example");
+
+  // missing keys tolerated (treated as empty strings)
+  const sparse = L.buildSubmission({ category: "מנשאים", name: "רק שם" });
+  assert.equal(sparse.ok, true);
+  assert.equal(sparse.payload.description, "");
+});
