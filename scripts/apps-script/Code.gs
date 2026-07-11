@@ -9,7 +9,7 @@ function doPost(e) {
   let data;
   try {
     data = JSON.parse(e.postData.contents);
-  } catch (err) {
+  } catch {
     return respond({ ok: false, error: "bad json" });
   }
   const clean = (v) => String(v == null ? "" : v).trim().slice(0, MAX_LEN);
@@ -21,14 +21,17 @@ function doPost(e) {
   const name = clean(data.name);
   if (!name || !category) return respond({ ok: false, error: "missing fields" });
 
-  const lock = LockService.getScriptLock();
-  lock.waitLock(10000);
   try {
-    SpreadsheetApp.getActiveSpreadsheet()
-      .getSheetByName(TAB)
-      .appendRow([category, name, clean(data.description), clean(data.link), ""]);
-  } finally {
-    lock.releaseLock();
+    const lock = LockService.getScriptLock();
+    lock.waitLock(10000);
+    try {
+      const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(TAB);
+      sheet.appendRow([category, name, clean(data.description), clean(data.link), ""]);
+    } finally {
+      lock.releaseLock();
+    }
+  } catch (e2) {
+    return respond({ ok: false, error: "server" });
   }
   return respond({ ok: true });
 }

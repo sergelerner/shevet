@@ -237,7 +237,7 @@ function AddForm() {
       if (!reply.ok) throw new Error(reply.error || "submit failed");
       const fresh = [...products.value, built.product];
       products.value = fresh;
-      localStorage.setItem(CACHE_KEY, JSON.stringify(fresh));
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify(fresh)); } catch {}
       close();
     } catch (err) {
       console.error("submit failed:", err);
@@ -259,13 +259,13 @@ function AddForm() {
             </select>
           </label>
           <label>שם *
-            <input type="text" value=${form.name} onInput=${set("name")} required placeholder="שם המוצר או ההמלצה" />
+            <input type="text" value=${form.name} onInput=${set("name")} required maxlength="500" placeholder="שם המוצר או ההמלצה" />
           </label>
           <label>תיאור
-            <textarea rows="3" value=${form.description} onInput=${set("description")} placeholder="למה זה מומלץ?"></textarea>
+            <textarea rows="3" value=${form.description} onInput=${set("description")} maxlength="500" placeholder="למה זה מומלץ?"></textarea>
           </label>
           <label>קישור
-            <input type="text" inputmode="url" value=${form.link} onInput=${set("link")} placeholder="https://…" />
+            <input type="text" inputmode="url" value=${form.link} onInput=${set("link")} maxlength="500" placeholder="https://…" />
           </label>
           <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off"
             aria-hidden="true" value=${form.website} onInput=${set("website")} />
