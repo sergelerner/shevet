@@ -33,4 +33,6 @@ window.SHEVET_CONFIG = {
     { name: "ספרים לקטנטנים", emoji: "📚" },
   ],
   FALLBACK_EMOJI: "📦",
+  // Apps Script /exec URL for the add-item form; empty = button hidden.
+  SUBMIT_URL: "",
 };
